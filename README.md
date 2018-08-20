@@ -7,7 +7,7 @@
 1. do a pull request with your wallet address
 1. receive eth
 1. create ethereum wallet at https://www.myetherwallet.com/
-1. transfer the eth to your wallet created from myetherwallet
+1. transfer the eth to your wallet created from myetherwallet with a message in the data field
 1. download https://metamask.io/
 1. create ethereum wallet
 1. send eth/import account to your metamask account
