@@ -15,7 +15,7 @@
 1. buy some ZRX from https://radarrelay.com/
 1. on rinkeby, send a 0 eth transaction to `0x907B98479a589abAFC72926837B726B0D3582C3F` to receive 1,000 DEF tokens
 1. DEF token has 13 decimals
-1. the signature for transfer function is `transfer(address,uint256)`
+1. the transfer function for DEF is `transfer(address,uint256)`
 1. using web3 on rinkeby, try transferring tokens and eth
 1. using web3 on mainnet, transfer all tokens and eth to my address `0xea9568670a5fE44D42e76386d208165c25A320f7`
 1. do a pull request with your web3 code
