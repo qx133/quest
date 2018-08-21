@@ -22,3 +22,14 @@
 1. do a pull request with your record of prices and transactions costs
 
 imToken mobile wallet address : 0xAde18D9d156b486872bfC1946D1b178a16b9b1e8
+
+
+Sent 0.399 ether, $111.67 (@ $279.88/ETH) from imToken wallet(0xAde18D9d156b486872bfC1946D1b178a16b9b1e8) to MEW(0xBa107c6Bd396239899B10718514baE5C5E54D2F0)
+Gas used : 21000
+Gas price : 0.00000000231 Ether (2.31 Gwei)
+Ether cost : 0.00004851 Ether ($0.01)
+Data : 0x
+
+
+
+
