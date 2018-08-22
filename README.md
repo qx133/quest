@@ -20,3 +20,17 @@
 1. using web3 on mainnet, transfer all tokens and eth to my address `0xea9568670a5fE44D42e76386d208165c25A320f7`
 1. do a pull request with your web3 code
 1. do a pull request with your record of prices and transactions costs
+
+# quest-my-eth-wallet
+
+## requirements
+
+1. use web3 library functions
+1. browser based gui wallet similar to myetherwallet
+1. functional on rinkeby testnet
+1. able to send eth to another address with optional input of nonce, data, gasPrice, gasLimit
+1. able to send all eth to another address
+1. able to send any token to another address
+1. able to create contract
+1. able to show balances of eth and def token
+1. able to call smart contract functions
