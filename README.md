@@ -49,3 +49,9 @@
 1. setup circleci on github
 1. setup codecov on github
 1. create a branch and do a pull request
+
+## quest-hello-solidity
+
+1. replace your truffle sample project with `helloworld.sol`
+1. add tests and target 100% coverage
+1. create a branch and do a pull request
