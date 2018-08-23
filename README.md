@@ -48,4 +48,4 @@
 1. run `yarn test` to ensure all the tests pass and a coverage report is generated
 1. setup circleci on github
 1. setup codecov on github
-1. create a pull request
+1. create a branch and do a pull request
