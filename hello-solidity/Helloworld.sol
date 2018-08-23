@@ -10,7 +10,7 @@ contract Mortal {
     }
 }
 
-contract Greeter is Mortal {
+contract Helloworld is Mortal {
     /* Define variable greeting of the type string */
     string public greeting;
     uint256 public count;
