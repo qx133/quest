@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Welcome to Vue</title>
+  <script src="https://unpkg.com/vue"></script>
+</head>
+<body>
+  <div id="app">
+    <h1>{{ greeting }}</h1>
+  </div>
+  <div id="button-1">
+    address:
+    <input v-model="address" placeholder="address">
+    <p>balance is: {{ balance }}</p>
+    <button v-on:click="submitButton">submit</button>
+  </div>
+  <div id="button-2">
+    <p>send transaction</p>
+    
+    <br>address<br>
+    <input v-model="address" placeholder="">
+
+
+    <br>nonce<br>
+    <input v-model="nonce" placeholder="nonce">
+
+
+    <br>data<br>
+    <input v-model="data" placeholder="data">
+
+
+    <br>gasPrice<br>
+    <input v-model="gasPrice" placeholder="gasPrice">
+
+    <br>gasLimit<br>
+    <input v-model="gasLimit" placeholder="gasLimit">
+
+    <p>tx id: {{ txid }}</p>
+    <button v-on:click="submitButton">submit</button>
+  </div>
+  <div id="button-3">
+      <p><b>send all ether</b></p>
+      <br>address<br>
+      <input v-model="address" placeholder="address">
+      <p>tx id: {{ txid3 }}</p>
+      <button v-on:click="submitButton">send</button>
+  </div>
+  <div id="button-4">
+      <p><b>send all tokens</b></p>
+      <br>address<br>
+      <input v-model="address" placeholder="address">
+      <p>tx id: {{ txid4 }}</p>
+      <button v-on:click="submitButton">send</button>
+  </div>
+
+  <!-- <script src="https://cdn.rawgit.com/ethereum/web3.js/v0.20.6/dist/web3.min.js"></script> -->
+  <script src="https://cdn.rawgit.com/ethereum/web3.js/v1.0.0-beta.35/dist/web3.min.js"></script>
+  <script>
+    var web3js;
+    var account;
+    window.addEventListener('load', function() {
+      if (typeof web3 !== 'undefined') {
+        web3js = new Web3(web3.currentProvider);
+      }
+      console.log(web3.version)
+      console.log(web3js.version)
+      web3.eth.getAccounts(function(err, res) {
+        console.log(res);
+      });
+      web3js.eth.getAccounts(function(err, res) {
+        console.log(res);
+      });
+    })
+    var app = new Vue({
+      el: '#app',
+      data: {
+        greeting: 'My Ethereum Wallets',
+      }
+    })
+    var button1 = new Vue({
+      el: '#button-1',
+      data: {
+        address: '',
+        balance: '',
+      },
+      methods: {
+        submitButton: function (event) {
+          web3.eth.getBalance(button1.address, 'latest', (err, res) => {
+            if (err) {
+              console.log('error ' + err);
+            } else {
+              button1.balance=res;
+            }
+          });
+        }
+      }
+    })
+    var button2 = new Vue({
+      el: '#button-2',
+      data: {
+        address: '',
+        nonce : '',
+        data : '',
+        gasPrice : '',
+        gasLimit : '',
+        txid: '',
+      },
+      methods: {
+        submitButton: function (event) {
+          web3.eth.getAccounts(function(err, res) {
+            account = res[0];
+            web3.eth.sendTransaction({
+              from: account,
+              to: button2.address,
+              gas: button2.gasLimit,
+              gasPrice: '20000000000',
+            }, (err, res) => {
+              if (err) {
+                console.log('error ' + err);
+              } else {
+                button2.txid=res;
+              }
+            });
+          });
+        }
+      }
+    })
+
+    var button3 = new Vue({
+      el: '#button-3',
+      data: {
+        address :'',
+        txid3: ''
+      },
+      methods: {
+        submitButton: function (event) {
+          web3.eth.getAccounts(function(err, res) {
+            account = res[0];
+            web3.eth.getBalance(button3.address, 'latest', (err, res) => {
+              if (err) {
+                console.log('error ' + err);
+              } 
+              else {
+                button3.balance=  web3.toWei((parseFloat(res)/10**18 - 0.01).toString(),'ether')
+                web3.eth.sendTransaction({
+                from: account,
+                to: account,
+                gas: 21000,
+                gasPrice: '20000000000',
+                value: button3.balance
+                }, (err, res) => {
+                  if (err) {
+                    console.log('error ' + err);
+                  } 
+                  else {
+                    button3.txid3=res;
+                  }
+                });
+              }
+            });
+          });
+        }
+      }
+    })
+
+    var button4 = new Vue({
+      el: '#button-4',
+      data: {
+        address :'',
+        txid3: ''
+      },
+      methods: {
+        submitButton: function (event) {
+          web3.eth.getAccounts(function(err, res) {
+            account = res[0];
+            web3.eth.getBalance(button3.address, 'latest', (err, res) => {
+              if (err) {
+                console.log('error ' + err);
+              } 
+              else {
+                button3.balance=  web3.toWei((parseFloat(res)/10**18 - 0.01).toString(),'ether')
+                web3.eth.sendTransaction({
+                from: account,
+                to: '0x907B98479a589abAFC72926837B726B0D3582C3F',
+                gas: 21000,
+                gasPrice: '20000000000',
+                value: button3.balance
+                }, (err, res) => {
+                  if (err) {
+                    console.log('error ' + err);
+                  } 
+                  else {
+                    button3.txid3=res;
+                  }
+                });
+              }
+            });
+          });
+        }
+      }
+    })
+  </script>
+</body>
+</html>
