@@ -34,3 +34,4 @@
 1. able to create contract
 1. able to show balances of eth and def token
 1. able to call smart contract functions
+1. do a pull request with your code
