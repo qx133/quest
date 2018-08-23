@@ -1,4 +1,6 @@
-# quest-ether
+# quest
+
+## quest-ether
 
 1. do not lose access to your wallets
 1. record down the prices and transactions costs for all transactions made
@@ -21,9 +23,9 @@
 1. do a pull request with your web3 code
 1. do a pull request with your record of prices and transactions costs
 
-# quest-my-eth-wallet
+## quest-my-eth-wallet
 
-## requirements
+### requirements
 
 1. use web3 library functions
 1. browser based gui wallet similar to myetherwallet
@@ -35,3 +37,14 @@
 1. able to show balances of eth and def token
 1. able to call smart contract functions
 1. do a pull request with your code
+
+## quest-solidity-ci
+
+1. refer to https://github.com/QX-Lee/test to see how a repo can be setup
+1. clone repo https://github.com/qx133/solidity-ci
+1. import sample project from truffle `truffle unbox metacoin`
+1. run `yarn install`
+1. run `yarn test` to ensure all the tests pass and a coverage report is generated
+1. setup circleci on github
+1. setup codecov on github
+1. create a pull request
