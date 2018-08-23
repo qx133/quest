@@ -14,7 +14,6 @@ contract Greeter is Mortal {
     /* Define variable greeting of the type string */
     string public greeting;
     uint256 public count;
-    uint256 public count1;
 
     /* This runs when the contract is executed */
     constructor () public {
@@ -24,7 +23,6 @@ contract Greeter is Mortal {
     /* Main function */
     function greet() public returns (string) {
         count++;
-        count1++;
         return greeting;
     }
 }
