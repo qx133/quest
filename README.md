@@ -41,7 +41,8 @@
 ## quest-solidity-ci
 
 1. refer to https://github.com/QX-Lee/test to see how a repo can be setup
-1. clone repo https://github.com/qx133/solidity-ci
+1. fork repo https://github.com/qx133/solidity-ci
+1. clone repo locally
 1. import sample project from truffle `truffle unbox metacoin`
 1. run `yarn install`
 1. run `yarn test` to ensure all the tests pass and a coverage report is generated
