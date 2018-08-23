@@ -17,8 +17,8 @@ contract Greeter is Mortal {
     uint256 public count1;
 
     /* This runs when the contract is executed */
-    constructor (string _greeting) public {
-        greeting = _greeting;
+    constructor () public {
+        greeting = "hello world";
     }
 
     /* Main function */
