@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Welcome to Vue</title>
+  <script src="https://unpkg.com/vue"></script>
+</head>
+<body>
+  <div id="app">
+    <h1>{{ greeting }}</h1>
+  </div>
+  <div id="button-0">
+    private key:
+    <input v-model="privateKey" placeholder="private key">
+    <p>address is: {{ address }}</p>
+    <button v-on:click="submitButton">submit</button>
+  </div>
+  <div id="button-1">
+    <p>address:</p>
+    <input v-model="address" placeholder="address">
+    <p>balance is: {{ balance }}</p>
+    <button v-on:click="submitButton">submit</button>
+  </div>
+  <div id="button-2">
+    <p>send transaction</p>
+    <p>tx id: {{ txid }}</p>
+    <button v-on:click="submitButton">submit</button>
+  </div>
+
+  <!-- <script src="https://cdn.rawgit.com/ethereum/web3.js/v0.20.6/dist/web3.min.js"></script> -->
+  <script src="https://cdn.rawgit.com/ethereum/web3.js/v1.0.0-beta.35/dist/web3.min.js"></script>
+  <script>
+    var web3 = new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io'));
+
+    var app = new Vue({
+      el: '#app',
+      data: {
+        greeting: 'My Ethereum Wallets',
+      }
+    })
+    var button0 = new Vue({
+      el: '#button-0',
+      data: {
+        privateKey: '',
+        address: '',
+      },
+      methods: {
+        submitButton: function (event) {
+          var account = web3.eth.accounts.privateKeyToAccount(button0.privateKey);
+          web3.eth.accounts.wallet.add(account);
+          button0.address = web3.eth.accounts.wallet[0].address;
+        }
+      }
+    })
+    var button1 = new Vue({
+      el: '#button-1',
+      data: {
+        address: '',
+        balance: '',
+      },
+      methods: {
+        submitButton: function (event) {
+          web3.eth.getBalance(button1.address, 'latest', (err, res) => {
+            if (err) {
+              console.log('error ' + err);
+            } else {
+              button1.balance=res;
+            }
+          });
+        }
+      }
+    })
+    var button2 = new Vue({
+      el: '#button-2',
+      data: {
+        txid: '',
+      },
+      methods: {
+        submitButton: function (event) {
+          web3.eth.sendTransaction({
+            from: '0xb8CE9ab6943e0eCED004cDe8e3bBed6568B2Fa01',
+            to: '0xb8CE9ab6943e0eCED004cDe8e3bBed6568B2Fa01',
+            gas: 21000,
+            gasPrice: '20000000000',
+          }, (err, res) => {
+            if (err) {
+              console.log('error ' + err);
+            } else {
+              button2.txid=res;
+            }
+          });
+        }
+      }
+    })
+  </script>
+</body>
+</html>
