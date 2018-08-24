@@ -22,8 +22,9 @@ contract Pyramid {
     //Payout owner their fee
     //Update balance of every token owner
     function buyTicket() public payable {
-        totalTickets++;
-        ticketsOwnedBy[msg.sender] += msg.value/ticketPriceInWei;
+        uint numTicketsBought = msg.value/ticketPriceInWei;
+        totalTickets +=numTicketsBought;
+        ticketsOwnedBy[msg.sender] += numTicketsBought;
         //Send back remainder
         msg.sender.transfer(msg.value%ticketPriceInWei);
         //Add message sender to list of token owners
@@ -38,13 +39,13 @@ contract Pyramid {
             listOfTicketOwners.push(msg.sender);
         }
         //Pay owner's fee
-        owner.transfer(ticketSaleFeePercentage*ticketPriceInWei/100);
+        owner.transfer(ticketSaleFeePercentage*ticketPriceInWei*numTicketsBought/100);
         
         //Increase balance of every token owner
         arrayLength = listOfTicketOwners.length;
         for(uint j = 0; j < arrayLength; j++) {
             address ownerAddress  = listOfTicketOwners[j];
-            balanceOf[ownerAddress] += ticketsOwnedBy[ownerAddress]*(100 - ticketSaleFeePercentage)*ticketPriceInWei/100/totalTickets;
+            balanceOf[ownerAddress] += ticketsOwnedBy[ownerAddress]*(100 - ticketSaleFeePercentage)*ticketPriceInWei*numTicketsBought/100/totalTickets;
         }
     }
     
