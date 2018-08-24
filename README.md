@@ -66,3 +66,14 @@
 1. when a user redeems his tickets for eth, levy a 10% fee
 1. the 10% fee is distributed to users proportional to their tickets
 1. upload your code, create a branch and do a pull request to this repo
+
+## quest-erc20
+
+1. implement a erc20 compliant token by importing from https://github.com/OpenZeppelin/openzeppelin-solidity
+1. token should be burnable
+1. token should have 13 decimals
+1. assign yourself all the 1 million tokens
+1. write tests in solidity
+1. upload your code for ci to run
+1. deploy on rinkeby testnet
+1. indicate your token address, create a branch and do a pull request
