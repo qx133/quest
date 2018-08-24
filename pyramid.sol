@@ -18,13 +18,14 @@ contract Pyramid {
         owner = msg.sender;
     }
 
-    //Assign ticket to sender
+    //Increase ticket ownership count, return remainder to sender
     //Payout owner their fee
     //Update balance of every token owner
     function buyTicket() public payable {
-        require(msg.value == ticketPriceInWei);
         totalTickets++;
-        ticketsOwnedBy[msg.sender]++;
+        ticketsOwnedBy[msg.sender] += msg.value/ticketPriceInWei;
+        //Send back remainder
+        msg.sender.transfer(msg.value%ticketPriceInWei);
         //Add message sender to list of token owners
         bool isContainedInArray = false;
         uint arrayLength = listOfTicketOwners.length;
@@ -37,7 +38,7 @@ contract Pyramid {
             listOfTicketOwners.push(msg.sender);
         }
         //Pay owner's fee
-        owner.transfer(ticketSaleFeePercentage/100*ticketPriceInWei);
+        owner.transfer(ticketSaleFeePercentage*ticketPriceInWei/100);
         
         //Increase balance of every token owner
         arrayLength = listOfTicketOwners.length;
