@@ -55,3 +55,16 @@
 1. replace your truffle sample project with `helloworld.sol`
 1. add tests and target 100% coverage
 1. create a branch and do a pull request
+
+## quest-piraamid
+
+1. you can use remix, no ui and truffle tests are required
+1. implement in solidity the following game
+1. users can spend eth to buy tickets
+1. these tickets start with a value of 0 eth
+1. when another ticket is bought, 99% of the eth is distributed to all tickets
+1. the remaining 1% is collected as fee
+1. a user can redeem his tickets anytime but he cannot redeem a portion of his tickets
+1. when a user redeems his tickets for eth, levy a 10% fee
+1. the 10% fee is distributed to users proportional to their tickets
+1. upload your code, create a branch and do a pull request to this repo
