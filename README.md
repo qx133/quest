@@ -8,6 +8,7 @@
 1. [quest-erc20](https://github.com/qx133/quest#quest-erc20)
 1. [quest-honeypot](https://github.com/qx133/quest#quest-honeypot)
 1. [quest-re-entrancy](https://github.com/qx133/quest#quest-re-entrancy)
+1. [quest-ico](https://github.com/qx133/quest#quest-ico)
 
 ## quest-ether
 
@@ -88,9 +89,29 @@
 1. indicate your token address, create a branch and do a pull request
 
 ## quest-honeypot
+
 1. create a contract to make the [honeypot](https://etherscan.io/address/0x13c547Ff0888A0A876E6F1304eaeFE9E6E06FC4B#code) possible
 1. upload your code, create a branch and do a pull request to this repo
 
 ## quest-re-entrancy
+
 1. create a contract to exploit the [re-entrancy bug](https://rinkeby.etherscan.io/address/0x22bd3028f77c9b27ab35d3b09ccc56129c9d7013#code)
 1. upload your code, create a branch and do a pull request to this repo
+
+### quest-ico
+
+1. implement in solidity the following ico
+1. functional on rinkeby testnet
+1. ico starts 5 minutes from deployment
+1. ico ends 5 hours from deployment
+1. only whitelisted addresses can join the ico
+1. eth and def can be used to join the ico
+1. 100,000 of your erc20 token is to be sold
+1. price function for eth is first 1 eth = 10,000 token then 1 eth = 5,000 token afterwards
+1. price function for def is first 1,000 def = 10,000 token then 1,000 def = 5,000 token afterwards
+1. events must be logged for audit trail of participants
+1. owner can stop the ico anytime
+1. deploy ico
+1. move 100,000 of your erc20 token to the ico
+1. buy out your ico with 1.5 eth and the remaining in def
+1. post your contract address, upload your code, create a branch and do a pull request
