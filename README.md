@@ -110,6 +110,7 @@
 1. price function for eth is first 1 eth = 10,000 token then 1 eth = 5,000 token afterwards
 1. price function for def is first 1,000 def = 10,000 token then 1,000 def = 5,000 token afterwards
 1. events must be logged for audit trail of participants
+1. once funds are received, immediately send to your owner address for safekeeping
 1. owner can stop the ico anytime
 1. deploy ico
 1. move 100,000 of your erc20 token to the ico
