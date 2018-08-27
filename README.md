@@ -98,7 +98,7 @@
 1. create a contract to exploit the [re-entrancy bug](https://rinkeby.etherscan.io/address/0x22bd3028f77c9b27ab35d3b09ccc56129c9d7013#code)
 1. upload your code, create a branch and do a pull request to this repo
 
-### quest-ico
+## quest-ico
 
 1. implement in solidity the following ico
 1. functional on rinkeby testnet
