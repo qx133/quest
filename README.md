@@ -77,3 +77,7 @@
 1. upload your code for ci to run
 1. deploy on rinkeby testnet
 1. indicate your token address, create a branch and do a pull request
+
+## quest-honeypot
+1. create a contract to make the [honeypot](https://etherscan.io/address/0x13c547Ff0888A0A876E6F1304eaeFE9E6E06FC4B#code) possible
+1. upload your code, create a branch and do a pull request to this repo
