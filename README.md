@@ -9,6 +9,7 @@
 1. [quest-honeypot](https://github.com/qx133/quest#quest-honeypot)
 1. [quest-re-entrancy](https://github.com/qx133/quest#quest-re-entrancy)
 1. [quest-ico](https://github.com/qx133/quest#quest-ico)
+1. [quest-oraclize](https://github.com/qx133/quest#quest-oraclize)
 
 ## quest-ether
 
@@ -115,4 +116,13 @@
 1. deploy ico
 1. move 100,000 of your erc20 token to the ico
 1. buy out your ico with 1.5 eth and the remaining in def
+1. post your contract address, upload your code, create a branch and do a pull request
+
+## quest-oraclize
+
+1. for reference https://medium.com/coinmonks/using-apis-in-your-ethereum-smart-contract-with-oraclize-95656434292e
+1. test out oraclize queries
+1. implement get random number using oraclize in solidity
+1. implement get ethusd using oraclize in solidity
+1. deploy in rinkeby
 1. post your contract address, upload your code, create a branch and do a pull request
