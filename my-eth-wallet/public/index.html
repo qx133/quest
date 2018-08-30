@@ -34,6 +34,7 @@
     
     value:
     <input v-model="value" placeholder="value">
+    <button v-on:click="sendAll">GET MAX</button>
 
     <p>txn id: {{ txnId }}</p>
     <button v-on:click="send">SEND</button>
@@ -42,18 +43,18 @@
 
   <pre>
     <div id="contract">
-      <h3>Contract call</h3>
+      <h3>Contract Transaction</h3>
       Contract Address:
       <input v-model="contractAddress" placeholder="contractAddress">
   
       Contract Abi:
       <input v-model="abi" placeholder="abi">
       
-      arg1:
-      <input v-model="arg1" placeholder="arg1">
+      Function:
+      <input v-model="functionName" placeholder="function name">
 
-      arg1:
-      <input v-model="arg2" placeholder="arg2">
+      args (comma separated):
+      <input v-model="arg1" placeholder="arg1">
       
       gas Price:
       <input v-model="gasPrice" placeholder="gasPrice">
@@ -62,24 +63,60 @@
       <input v-model="gasLimit" placeholder="gasLimit">
       
       value:
-      <input v-model="value" placeholder="value">
-  
-      <p>txn id / Result : {{ txnId }}</p>
-      <button v-on:click="send">CALL</button>
+      <input v-model="value" placeholder="value"/>
+      
+      <button v-on:click="send">SEND txn</button>
+      <h3>txn id : {{ txnId }}</h3>
+
+      <h3>GET BALANCES</h3>
+      ETH balance:
+      <input v-model="ETHbalance" placeholder="ether balance">
 
       DEF balance:
-      <input v-model="DEFbalance" placeholder="balance">
+      <input v-model="DEFbalance" placeholder="def balance">
   
       <button v-on:click="balance">GET BALANCE</button>
     </div>
+    </pre>
+
+
+    <pre>
+        <div id="deploy">
+          <h3>Deploy Contract</h3>
+          Contract Abi:
+          <input v-model="abi" placeholder="abi">
+          
+          ByteCode:
+          <input v-model="byteCode" placeholder="ByteCode">
+    
+          args (comma separated):
+          <input v-model="args" placeholder="arguments">
+          
+          gas Price:
+          <input v-model="gasPrice" placeholder="gasPrice">
+          
+          gas Limit:
+          <input v-model="gasLimit" placeholder="gasLimit">
+          
+          <button v-on:click="deploy">DEPLOY CONTRACT</button>
+          <h3>Contract Address : {{ contractAddress }}</h3>
+        </div>
     </pre>
 
   <!-- <script src="https://cdn.rawgit.com/ethereum/web3.js/v0.20.6/dist/web3.min.js"></script> -->
   <script src="https://cdn.rawgit.com/ethereum/web3.js/v1.0.0-beta.35/dist/web3.min.js"></script>
   <script>
     var web3 = new Web3(new Web3.providers.HttpProvider("https://rinkeby.infura.io"));
-    // let util = require('ethereumjs-util');
-    // let tx = require('ethereumjs-tx');
+
+    const privateKey = '';
+    const account = web3.eth.accounts.privateKeyToAccount('0x' + privateKey);
+    web3.eth.accounts.wallet.add(account);
+    web3.eth.defaultAccount = account.address;
+    let address = account.address;
+    console.log("address: " + address);
+    console.log(web3.eth.accounts.wallet);
+    console.log("accounts: " + web3.eth.accounts);
+    
     var app = new Vue({
       el: '#app',
       data: {
@@ -117,17 +154,6 @@
       },
       methods: {
         send: function (event) {
-          const privateKey = 'EB5513D506854DC8452B62312A6FAD27EE0D62C3FDCD0129FC2B4C7E008ED154';
-          const account = web3.eth.accounts.privateKeyToAccount('0x' + privateKey);
-          web3.eth.accounts.wallet.add(account);
-          web3.eth.defaultAccount = account.address;
-
-          let address = account.address;
-          console.log("address: " + address);
-          console.log(web3.eth.accounts.wallet);
-          console.log("accounts: " + web3.eth.accounts);
-          
-          let transactionCount = web3.eth.getTransactionCount(address);
           //eth
           let txObj = {
               from: address,
@@ -146,6 +172,15 @@
               console.log(sendEth.txnId);
             }
           });
+        },
+        sendAll: function (event) {
+          web3.eth.getBalance(address, 'latest', (err, res) => {
+            if (err) {
+              console.log('error ' + err);
+            } else {
+              sendEth.value = res - sendEth.gasPrice * sendEth.gasLimit;
+            }
+          });
         }
       }
     })
@@ -154,6 +189,7 @@
       data: {
         contractAddress: '0x907B98479a589abAFC72926837B726B0D3582C3F',
         abi: '[{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_spender","type":"address"},{"name":"_value","type":"uint256"}],"name":"approve","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transferFrom","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_value","type":"uint256"}],"name":"burn","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_spender","type":"address"},{"name":"_subtractedValue","type":"uint256"}],"name":"decreaseApproval","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"_owner","type":"address"}],"name":"balanceOf","outputs":[{"name":"balance","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transfer","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_spender","type":"address"},{"name":"_addedValue","type":"uint256"}],"name":"increaseApproval","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"_owner","type":"address"},{"name":"_spender","type":"address"}],"name":"allowance","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"payable":false,"stateMutability":"nonpayable","type":"fallback"},{"anonymous":false,"inputs":[{"indexed":true,"name":"burner","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Burn","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"owner","type":"address"},{"indexed":true,"name":"spender","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Approval","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"},{"indexed":true,"name":"to","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Transfer","type":"event"}]',
+        functionName: '',
         arg1: '0xea9568670a5fE44D42e76386d208165c25A320f7',
         arg2: '10',
         gasPrice: '20000000000',
@@ -161,43 +197,29 @@
         txnId: '',
         value: '0',
         DEFbalance: '',
+        ETHbalance: '',
       },
       methods: {
         send: function (event) {
-
-          const privateKey = 'EB5513D506854DC8452B62312A6FAD27EE0D62C3FDCD0129FC2B4C7E008ED154';
-          const account = web3.eth.accounts.privateKeyToAccount('0x' + privateKey);
-          web3.eth.accounts.wallet.add(account);
-          web3.eth.defaultAccount = account.address;
-
-          let address = account.address;
-          console.log("address: " + address);
-          console.log(web3.eth.accounts.wallet);
-          console.log("accounts: " + web3.eth.accounts);
-
           var contractObj = new web3.eth.Contract(JSON.parse(contract.abi, contract.contractAddress));
           contractObj.options.address = contract.contractAddress;
           contractObj.options.from = address; // default from address
           contractObj.options.gasPrice = '20000000000'; // default gas price in wei
           contractObj.options.gas = 210000; // provide as fallback always 5M gas
           console.log(contractObj.options.address);
-
-          contractObj.methods.transfer(contract.arg1, contract.arg2).send({from: address}).on('transactionHash', function(hash){
+          
+          var args = contract.arg1.split(',');
+          console.log(args);
+          contractObj.methods[contract.functionName](...args).send({from: address}).on('transactionHash', function(hash){
             contract.txnId = hash;
             console.log(hash);
           }).on('error', console.error);
+          // contractObj.methods[contract.functionName](...args).call({from: address}).then(function(result){
+          //   console.log(result);
+          //     contract.txnId = result;
+          // });
         },
         balance: function (event) {
-          const privateKey = 'EB5513D506854DC8452B62312A6FAD27EE0D62C3FDCD0129FC2B4C7E008ED154';
-          const account = web3.eth.accounts.privateKeyToAccount('0x' + privateKey);
-          web3.eth.accounts.wallet.add(account);
-          web3.eth.defaultAccount = account.address;
-
-          let address = account.address;
-          console.log("address: " + address);
-          console.log(web3.eth.accounts.wallet);
-          console.log("accounts: " + web3.eth.accounts);
-
           var contractObj = new web3.eth.Contract(JSON.parse(contract.abi, contract.contractAddress));
           contractObj.options.address = contract.contractAddress;
           contractObj.options.from = address; // default from address
@@ -208,9 +230,51 @@
             console.log(result);
               contract.DEFbalance = result;
           });
+          web3.eth.getBalance(address, 'latest', (err, res) => {
+            if (err) {
+              console.log('error ' + err);
+            } else {
+              contract.ETHbalance=res;
+            }
+          });
         }
       }
     })
+    var deploy = new Vue({
+      el: '#deploy',
+      data: {
+        abi: '[{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_spender","type":"address"},{"name":"_value","type":"uint256"}],"name":"approve","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transferFrom","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_value","type":"uint256"}],"name":"burn","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_spender","type":"address"},{"name":"_subtractedValue","type":"uint256"}],"name":"decreaseApproval","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"_owner","type":"address"}],"name":"balanceOf","outputs":[{"name":"balance","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transfer","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_spender","type":"address"},{"name":"_addedValue","type":"uint256"}],"name":"increaseApproval","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"_owner","type":"address"},{"name":"_spender","type":"address"}],"name":"allowance","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"payable":false,"stateMutability":"nonpayable","type":"fallback"},{"anonymous":false,"inputs":[{"indexed":true,"name":"burner","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Burn","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"owner","type":"address"},{"indexed":true,"name":"spender","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Approval","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"},{"indexed":true,"name":"to","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Transfer","type":"event"}]',
+        byteCode: '0x608060405234801561001057600080fd5b5069021e19e0c9bab240000060008181553080825260016020908152604080842085905580519485525191937fddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef929081900390910190a3610988806100766000396000f3006080604052600436106100b95763ffffffff7c010000000000000000000000000000000000000000000000000000000060003504166306fdde038114610159578063095ea7b3146101e357806318160ddd1461021b57806323b872dd14610242578063313ce5671461026c57806342966c681461029757806366188463146102b157806370a08231146102d557806395d89b41146102f6578063a9059cbb1461030b578063d73dd6231461032f578063dd62ed3e14610353575b3480156100c557600080fd5b50604080517fa9059cbb000000000000000000000000000000000000000000000000000000008152336004820152662386f26fc1000060248201529051309163a9059cbb9160448083019260209291908290030181600087803b15801561012b57600080fd5b505af115801561013f573d6000803e3d6000fd5b505050506040513d602081101561015557600080fd5b5050005b34801561016557600080fd5b5061016e61037a565b6040805160208082528351818301528351919283929083019185019080838360005b838110156101a8578181015183820152602001610190565b50505050905090810190601f1680156101d55780820380516001836020036101000a031916815260200191505b509250505060405180910390f35b3480156101ef57600080fd5b50610207600160a060020a03600435166024356103b1565b604080519115158252519081900360200190f35b34801561022757600080fd5b50610230610417565b60408051918252519081900360200190f35b34801561024e57600080fd5b50610207600160a060020a036004358116906024351660443561041d565b34801561027857600080fd5b50610281610596565b6040805160ff9092168252519081900360200190f35b3480156102a357600080fd5b506102af60043561059b565b005b3480156102bd57600080fd5b50610207600160a060020a036004351660243561064b565b3480156102e157600080fd5b50610230600160a060020a036004351661073b565b34801561030257600080fd5b5061016e610756565b34801561031757600080fd5b50610207600160a060020a036004351660243561078d565b34801561033b57600080fd5b50610207600160a060020a0360043516602435610870565b34801561035f57600080fd5b50610230600160a060020a0360043581169060243516610909565b60408051808201909152600781527f64656661756c7400000000000000000000000000000000000000000000000000602082015281565b336000818152600260209081526040808320600160a060020a038716808552908352818420869055815186815291519394909390927f8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925928290030190a350600192915050565b60005481565b6000600160a060020a038316151561043457600080fd5b600160a060020a03841660009081526001602052604090205482111561045957600080fd5b600160a060020a038416600090815260026020908152604080832033845290915290205482111561048957600080fd5b600160a060020a0384166000908152600160205260409020546104b2908363ffffffff61093416565b600160a060020a0380861660009081526001602052604080822093909355908516815220546104e7908363ffffffff61094616565b600160a060020a03808516600090815260016020908152604080832094909455918716815260028252828120338252909152205461052b908363ffffffff61093416565b600160a060020a03808616600081815260026020908152604080832033845282529182902094909455805186815290519287169391927fddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef929181900390910190a35060019392505050565b600d81565b336000908152600160205260408120548211156105b757600080fd5b50336000818152600160205260409020546105d8908363ffffffff61093416565b600160a060020a03821660009081526001602052604081209190915554610605908363ffffffff61093416565b600055604080518381529051600160a060020a038316917fcc16f5dbb4873280815c1ee09dbd06736cffcc184412cf7a71a0fdb75d397ca5919081900360200190a25050565b336000908152600260209081526040808320600160a060020a0386168452909152812054808311156106a057336000908152600260209081526040808320600160a060020a03881684529091528120556106d5565b6106b0818463ffffffff61093416565b336000908152600260209081526040808320600160a060020a03891684529091529020555b336000818152600260209081526040808320600160a060020a0389168085529083529281902054815190815290519293927f8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925929181900390910190a35060019392505050565b600160a060020a031660009081526001602052604090205490565b60408051808201909152600381527f4445460000000000000000000000000000000000000000000000000000000000602082015281565b6000600160a060020a03831615156107a457600080fd5b336000908152600160205260409020548211156107c057600080fd5b336000908152600160205260409020546107e0908363ffffffff61093416565b3360009081526001602052604080822092909255600160a060020a03851681522054610812908363ffffffff61094616565b600160a060020a0384166000818152600160209081526040918290209390935580518581529051919233927fddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef9281900390910190a350600192915050565b336000908152600260209081526040808320600160a060020a03861684529091528120546108a4908363ffffffff61094616565b336000818152600260209081526040808320600160a060020a0389168085529083529281902085905580519485525191937f8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925929081900390910190a350600192915050565b600160a060020a03918216600090815260026020908152604080832093909416825291909152205490565b60008282111561094057fe5b50900390565b60008282018381101561095557fe5b93925050505600a165627a7a7230582050a744c37eef0bb823add9bef6941bad03179c7e6371818f4d5373e303b6b5d50029',
+        args: '',
+        gasPrice: '20000000000',
+        gasLimit: '2000000',
+        contractAddress: '',
+      },
+      methods: {
+        deploy: function (event) {
+          var contractObj = new web3.eth.Contract(JSON.parse(deploy.abi));
+          contractObj.options.from = address; // default from address
+          contractObj.options.gasPrice = '20000000000'; // default gas price in wei
+          contractObj.options.gas = 210000; // provide as fallback always 5M gas
+          
+          if (deploy.args !== '') {
+            contractObj.options.arguments = deploy.args.split(',');
+            console.log(deploy.args.split(','));
+          }
+          console.log(contractObj);
+          contractObj.deploy({
+              data: deploy.byteCode
+          }).send({
+              from: address,
+              gas: deploy.gasLimit,
+              gasPrice: deploy.gasPrice
+          }).then(function(newContractInstance){
+              console.log(newContractInstance.options.address); // instance with the new contract address
+              deploy.contractAddress = newContractInstance.options.address;
+          });
+          }
+        }
+      })
   </script>
 </body>
 </html>
