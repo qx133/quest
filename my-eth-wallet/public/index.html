@@ -11,14 +11,89 @@
   <div id="button-1">
     address:
     <input v-model="address" placeholder="address">
-    <p>balance is: {{ balance }}</p>
+    <p>ETH: {{ ETHbalance }}</p>
+    <p>DEF: {{ DEFbalance }}</p>
     <button v-on:click="submitButton">submit</button>
+  </div>
+
+  <br><br>
+
+  <div id="send">
+    address:
+    <input v-model="toAddress" placeholder="address">
+    <br>
+    value:
+    <input v-model="value" placeholder="value">
+    <button v-on:click="allEther">max</button>
+    <br>
+    nonce:
+    <input v-model="nonce" placeholder="nonce">
+    <br>
+    gasPrice:
+    <input v-model="gasPrice" placeholder="gasPrice">
+    <br>
+    data:
+    <input v-model="data" placeholder="data">
+    <br>
+    gasLimit:
+     <input v-model="gasLimit" placeholder="gasLimit">
+    <p>balance is: {{ balance }}</p>
+    <p>txHash: {{ txHash }}</p>
+    <button v-on:click="submitButton">send</button>
+  </div>
+
+
+  <div id="sendErc20">
+    address:
+    <input v-model="toAddress" placeholder="address">
+    <br>
+    value:
+    <input v-model="value" placeholder="value">
+    <button v-on:click="allTokens">max</button>
+    <br>
+    nonce:
+    <input v-model="nonce" placeholder="nonce">
+    <br>
+    gasPrice:
+    <input v-model="gasPrice" placeholder="gasPrice">
+    <br>
+    data:
+    <input v-model="data" placeholder="data">
+    <br>
+    gasLimit:
+     <input v-model="gasLimit" placeholder="gasLimit">
+    <p>balance is: {{ balance }}</p>
+    <p>txHash: {{ txHash }}</p>
+    <button v-on:click="submitButton">send</button>
   </div>
 
   <script src="https://cdn.rawgit.com/ethereum/web3.js/v0.20.6/dist/web3.min.js"></script>
   <!-- <script src="https://cdn.rawgit.com/ethereum/web3.js/v1.0.0-beta.35/dist/web3.min.js"></script> -->
   <script>
-    var web3 = new Web3(new Web3.providers.HttpProvider("https://rinkeby.infura.io"));
+    window.addEventListener('load', function() {
+
+    // Checking if Web3 has been injected by the browser (Mist/MetaMask)
+    if (typeof web3 !== 'undefined') {
+      // Use Mist/MetaMask's provider
+      web3js = new Web3(web3.currentProvider);
+    } else {
+      console.log('No web3? You should consider trying MetaMask!')
+      // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
+      web3js = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+    }
+
+    /*web3.eth.getAccounts(function(err, res) {
+      console.log(res);
+    });
+    web3js.eth.getAccounts(function(err, res) {
+      console.log(res);
+    });*/
+
+    // Now you can start your app & access web3 freely:
+
+    });
+
+    var Erc20Abi = [{"constant":true,"inputs":[{"name":"_owner","type":"address"}],"name":"balanceOf","outputs":[{"name":"balance","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"}];
     var app = new Vue({
       el: '#app',
       data: {
@@ -29,7 +104,8 @@
       el: '#button-1',
       data: {
         address: '',
-        balance: '',
+        ETHbalance: '',
+        DEFbalance: '',
       },
       methods: {
         submitButton: function (event) {
@@ -37,9 +113,80 @@
             if (err) {
               console.log('error ' + err);
             } else {
-              button1.balance=res;
+              button1.ETHbalance=res;
             }
           });
+          var DEFContractAddr = '0x2155877dA05c52368B830bFD56e96405a2668D8B';
+          var contract = web3.eth.contract(Erc20Abi).at(DEFContractAddr);
+          contract.balanceOf(button1.address, (err, res) => {
+            if (result) { 
+              button1.DEFbalance = res;
+            } else {
+              console.log(err); // Dump errors here
+            }
+          });
+        }
+      }
+    })
+  
+
+    var send = new Vue({
+      el: '#send',
+      data: {
+        toAddress: '',
+        value: '',
+        nonce: '',
+        gasPrice: '3',
+        data: '',
+        gasLimit: '21000',
+        balance: '',
+        txHash: '',
+        gasCost: '',
+      },
+      methods: {
+        submitButton: function (event) {
+          var userAccount;
+          var nonce;
+          web3.eth.getAccounts(function(err, res) {
+            userAccount = res[0];
+            web3.eth.getBalance(userAccount, 'latest', (err, result) => {
+              if (err) {
+                console.log('error ' + err);
+              } else {
+                send.balance=result;
+              }
+            });
+
+            web3.eth.getTransactionCount(userAccount, (err, res) => {
+              if (send.nonce == '') {
+                send.nonce = res;
+              }
+              var transaction = {};
+              transaction['to'] = send.toAddress;
+              transaction['value'] = send.value;
+              transaction['gas'] = send.gasLimit;
+              transaction['nonce'] = send.nonce;
+              transaction['data'] = send.data;
+              transaction['gasPrice'] = web3.toWei(send.gasPrice, 'gwei');
+
+              web3.eth.sendTransaction(transaction, function(err, transactionHash) {
+                console.log(transactionHash);
+                send.txHash = transactionHash;
+              });
+            });
+          });
+        },
+        allEther: function(event) {
+          web3.eth.getAccounts((err, res) => {
+            userAccount = res[0];
+            web3.eth.getBalance(userAccount, 'latest', (err, result) => {
+              if (err) {
+                console.log('error' + err);
+              } else {
+                send.value = result - web3.toWei(send.gasPrice, 'gwei')*send.gasLimit;
+              }
+            })
+          })
         }
       }
     })
